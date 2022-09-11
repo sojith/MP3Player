@@ -3,6 +3,7 @@ from tkinter import filedialog
 import ffmpeg
 import wave
 import pyaudio
+import os
 
 def selectButtonFunc():
 	global playlist_pos_y
@@ -49,6 +50,10 @@ def movePositionFunc(movement):
 
 
 def playFile(filename):
+	try:
+		os.remove("test2.wav")
+	except:
+		print("file removed")
 	print ("Playing file " + filename)
 	inter = ffmpeg.input(filename)
 	stream = ffmpeg.output(inter, "test2.wav")
@@ -88,17 +93,39 @@ canvas.pack()
 
 canvas.create_text(10,20, text="Playlist", anchor="w", fill="green3", font=('Dustismo','12', 'bold'))
 
-#Select Button
-selBtn = tkinter.Button(canvas, text="Select", background="dim gray", activebackground="slate gray", highlightthickness=0, command=selectButtonFunc)
-selBtn.place(x=10, y=310)
+#Create images
+selImg=tkinter.PhotoImage(file='./icons/eject.png')
+selImg.configure(width=32, height=32)
 
-#Forward
-forwardBtn = tkinter.Button(canvas, text="Forward", background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(1))
-forwardBtn.place(x=90, y=310)
+nextTrackImg=tkinter.PhotoImage(file='./icons/nextTrack.png')
+nextTrackImg.configure(width=32, height=32)
+
+previousTrackImg=tkinter.PhotoImage(file='./icons/previousTrack.png')
+previousTrackImg.configure(width=32, height=32)
+
+playImg=tkinter.PhotoImage(file='./icons/play.png')
+playImg.configure(width=32, height=32)
+
+
+
+#Select Button
+#selBtn = tkinter.Button(canvas, text="Select", background="dim gray", activebackground="slate gray", highlightthickness=0, command=selectButtonFunc)
+selBtn = tkinter.Button(canvas, image=selImg, background="dim gray", activebackground="slate gray", highlightthickness=0, command=selectButtonFunc)
+selBtn.place(x=10, y=305)
 
 #Backward
-backwardBtn = tkinter.Button(canvas, text="Backward", background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(-1))
-backwardBtn.place(x=190, y=310)
+#backwardBtn = tkinter.Button(canvas, text="Backward", background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(-1))
+backwardBtn = tkinter.Button(canvas, image=previousTrackImg, background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(-1))
+backwardBtn.place(x=50, y=305)
+
+#Play
+playBtn = tkinter.Button(canvas, image=playImg, background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: playFile(playlist_files[current_pos]))
+playBtn.place(x=90, y=305)
+
+#Forward
+#nextTrackBtn = tkinter.Button(canvas, text="Forward", background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(1))
+previousTrackBtn = tkinter.Button(canvas, image=nextTrackImg, background="dim gray", activebackground="slate gray", highlightthickness=0, command=lambda: movePositionFunc(1))
+previousTrackBtn.place(x=130, y=305)
 
 #btn.pack()
 
